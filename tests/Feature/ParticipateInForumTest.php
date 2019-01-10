@@ -14,15 +14,14 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function unauthenticated_users_may_not_allow_to_add_reply()
     {
-        $this->withoutExceptionHandling()->expectException('Illuminate\Auth\AuthenticationException');
-
-        $this->post('threads/some-channel/1/replies', []);
+        $this->post('threads/some-channel/1/replies')
+            ->assertRedirect('/login');
     }
 
     /** @test */
     public function a_reply_has_a_body()
     {
-        $this->withExceptionHandling()->signIn();
+        $this->signIn();
 
         $reply = make('App\Reply', ['body' => null]);
         $thread = create('App\Thread');

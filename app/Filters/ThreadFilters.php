@@ -8,7 +8,7 @@ use App\User;
  * Class ThreadsFilter
  * @package App\Filter
  */
-class ThreadsFilter extends Filters
+class ThreadFilters extends Filters
 {
     protected  $filters = ['by'];
 

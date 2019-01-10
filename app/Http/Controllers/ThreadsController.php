@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Thread;
 use App\Channel;
 use Illuminate\Http\Request;
-use App\Filters\ThreadsFilter;
+use App\Filters\ThreadFilters;
 
+/**
+ * Class ThreadsController
+ * @package App\Http\Controllers
+ */
 class ThreadsController extends Controller
 {
+
     /**
      * ThreadsController constructor.
      */
@@ -22,7 +27,7 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadsFilter $filters)
+    public function index(Channel $channel, ThreadFilters $filters)
     {
         if ($channel->exists) {
             $threads = $channel->threads()->latest();
@@ -78,7 +83,10 @@ class ThreadsController extends Controller
      */
     public function show($channelId, Thread $thread)
     {
-        return view('threads.show', compact('thread'));
+        return view('threads.show', [
+            'thread' => $thread,
+            'replies' => $thread->replies()->paginate(5)
+        ]);
     }
 
     /**

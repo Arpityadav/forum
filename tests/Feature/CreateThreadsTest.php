@@ -43,10 +43,10 @@ class CreateThreadsTest extends TestCase
         factory('App\Channel', 2)->create();
 
         $this->publishThread(['channel_id' => null])
-            ->assertSessionHasErrors('channel_id');
+                ->assertSessionHasErrors('channel_id');
 
         $this->publishThread(['channel_id' => 999])
-            ->assertSessionHasErrors('channel_id');
+                ->assertSessionHasErrors('channel_id');
     }
 
     public function publishThread($overrides = [])

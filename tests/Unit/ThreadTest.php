@@ -35,7 +35,7 @@ class ThreadTest extends TestCase
     /** @test */
     public function it_consist_of_replies()
     {
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->reply);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->replies);
     }
 
     /** @test */
@@ -49,7 +49,7 @@ class ThreadTest extends TestCase
             'user_id' => 1
         ]);
 
-        $this->assertCount(1, $this->thread->reply);
+        $this->assertCount(1, $this->thread->replies);
     }
 
     /** @test */

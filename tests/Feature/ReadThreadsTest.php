@@ -28,6 +28,7 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_user_can_filter_threads_through_particular_channel()
     {
+        $this->withoutExceptionHandling();
         $channel = create('App\Channel');
         $threadInChannel = create('App\Thread', ['channel_id' => $channel->id]);
         $threadNotInChannel = create('App\Thread');
@@ -47,6 +48,7 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_user_can_read_replies_that_are_associated_with_a_thread()
     {
+        $this->withoutExceptionHandling();
         $reply = create('App\Reply', ['thread_id' => $this->thread->id]);
 
         $this->get($this->thread->path())
