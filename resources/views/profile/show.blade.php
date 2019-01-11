@@ -7,22 +7,24 @@
                 <h3>{{$profileUser->name}}</h3>
                 <small>Member since {{ $profileUser->created_at->diffForHumans() }}</small>
 
-                <div class="card">
-                    <div class="card-header">Forum threads</div>
 
-                    @foreach($threads as $thread)
-                    <div class="card-body">
-                        <article>
-                            <h4>
-                                <a href="{{ $thread->path() }}">
-                                    {{ $thread->title }}
-                                </a>
-                            </h4>
-                            <div class="body">{{ $thread->body }}</div>
-                        </article>
+                @foreach($threads as $thread)
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <a href="/profiles/{{ $profileUser->name }}">
+                                {{ $profileUser->name }}
+                            </a>
+                            posted: <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
+                            <small class="float-right">{{ $thread->created_at->diffForHumans() }}</small>
+                        </div>
+
+                        <div class="card-body">
+                            <article>
+                                <div class="body">{{ $thread->body }}</div>
+                            </article>
+                        </div>
                     </div>
-                    @endforeach
-                </div>
+                @endforeach
 
                 {{ $threads->links() }}
             </div>
