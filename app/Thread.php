@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Activity;
 use App\Filters\ThreadFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordActivity;
     /**
      * Don't auto-apply mass assignment protection.
      *
@@ -29,6 +31,7 @@ class Thread extends Model
             $thread->replies()->delete();
         });
     }
+
     /**
      * Get a string path for the thread.
      *
@@ -85,4 +88,6 @@ class Thread extends Model
     {
         return $filters->apply($query);
     }
+
+
 }
