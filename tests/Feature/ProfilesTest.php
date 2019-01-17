@@ -14,6 +14,7 @@ class ProfilesTest extends TestCase
     /** @test */
     public function a_user_has_a_profile()
     {
+        $this->withoutExceptionHandling();
         $user = create('App\User');
 
         $this->get("profiles/{$user->name}")
@@ -23,11 +24,11 @@ class ProfilesTest extends TestCase
     /** @test */
     public function profile_display_all_threads_associated_to_user()
     {
+        $this->signIn();
 
-        $user = create('App\User');
-        $thread = create('App\Thread', ['user_id' => $user->id]);
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
 
-        $this->get("profiles/{$user->name}")
+        $this->get("/profiles/" . auth()->user()->name)
             ->assertSee($thread->title)
             ->assertSee($thread->body);
     }

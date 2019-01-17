@@ -7,9 +7,21 @@ trait RecordActivity
     public static function bootRecordActivity()
     {
         if (auth()->guest()) return;
-        static::created(function ($thread){
-            $thread->recordActivity('created');
+
+        foreach (static::getActivitiesToRecord() as $record) {
+            static::$record(function ($model) use ($record) {
+                $model->recordActivity($record);
+            });
+        }
+
+        static::deleting(function ($model){
+            $model->activity()->delete();
         });
+    }
+
+    protected static function getActivitiesToRecord()
+    {
+        return ['created'];
     }
 
     protected function recordActivity($event)
