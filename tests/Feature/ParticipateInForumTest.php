@@ -42,4 +42,56 @@ class ParticipateInForumTest extends TestCase
 
         $this->get($thread->path())->assertSee($reply->body);
     }
+
+    /** @test */
+    public function unauthorized_users_cannot_delete_a_reply()
+    {
+        $reply = create('App\Reply');
+
+        $this->delete("/replies/{$reply->id}")
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this->delete("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function authorized_users_can_delete_a_reply()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $response = $this->delete("/replies/{$reply->id}");
+        $response->assertStatus(302);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    /** @test */
+    public function authorized_users_can_edit_a_reply()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $updated_reply = "Updated!";
+        $response = $this->patch("/replies/{$reply->id}", ['body' => $updated_reply]);
+
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updated_reply]);
+    }
+
+    /** @test */
+    public function unauthorized_users_cannot_edit_a_reply()
+    {
+        $reply = create('App\Reply');
+
+        $this->patch("/replies/{$reply->id}")
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this->patch("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
 }

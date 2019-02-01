@@ -18,6 +18,9 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
+    <style>
+        [v-cloak] {display: none;}
+    </style>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -27,6 +30,7 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <flash message="{{ session('flash') }}"></flash>
     </div>
 </body>
 </html>
