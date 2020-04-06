@@ -24,11 +24,24 @@ class FavoritesTest extends TestCase
         $this->signIn();
         $reply = create('App\Reply');
 
-        $this->withoutExceptionHandling();
         $this->post('replies/' . $reply->id . '/favorites');
 
         $this->assertCount(1, $reply->favorites);
     }
+
+        /** @test */
+    public function an_authenticated_user_can_unfavorite_a_reply()
+    {
+        $this->signIn();
+        $reply = create('App\Reply');
+
+        $this->withoutExceptionHandling();
+        $reply->favorite();
+
+        $this->delete('replies/' . $reply->id . '/favorites');
+        $this->assertCount(0, $reply->favorites);
+    }
+
 
     /** @test */
     public function an_authenticated_user_can_not_favorite_twice()

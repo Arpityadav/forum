@@ -6,14 +6,17 @@
             <div class="col-md-10">
                 <h3>{{$profileUser->name}}</h3>
 
-                @foreach($activities as $date => $records)
+                @forelse ($activities as $date => $activity)
                     <h3 class="page-header">{{ $date }}</h3>
-                    @foreach($records as $activity)
-                        @if(view()->exists("profile.activities.{$activity->type}"))
-                            @include("profile.activities.{$activity->type}")
+
+                    @foreach ($activity as $record)
+                        @if (view()->exists("profile.activities.{$record->type}"))
+                            @include ("profile.activities.{$record->type}", ['activity' => $record])
                         @endif
                     @endforeach
-                @endforeach
+                @empty
+                    <p>There is no activity from the user yet.</p>
+                @endforelse
             </div>
         </div>
     </div>

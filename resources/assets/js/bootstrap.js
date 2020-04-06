@@ -40,6 +40,12 @@ if (token) {
 
 window.events = new Vue();
 
+Vue.prototype.authorize = function(handler) {
+    let user = window.App.user;
+
+    return user ? handler(user) : false;
+};
+
 window.flash = function(message) {
     window.events.$emit('flash', message);
 };

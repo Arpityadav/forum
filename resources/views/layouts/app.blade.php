@@ -12,6 +12,12 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script charset="utf-8">
+        window.App = {!! json_encode([
+            'signedIn' => \Auth::check(),
+            'user' => \Auth::user(),
+        ]) !!};
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
