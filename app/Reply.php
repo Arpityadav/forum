@@ -16,6 +16,8 @@ class Reply extends Model
 
     protected $appends = ['favoritesCount', 'isFavorited'];
 
+    protected $touches = ['updated_at'];
+
     protected static function boot()
     {
         parent::boot();

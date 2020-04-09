@@ -5,6 +5,7 @@ namespace App;
 use App\Activity;
 use App\Filters\ThreadFilters;
 use App\Notifications\ThreadWasUpdated;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use function foo\func;
@@ -125,5 +126,12 @@ class Thread extends Model
         $this->subscriptions
             ->where('user_id', '!=', $reply->id)
             ->each->notify($reply);
+    }
+
+    public function hasUpdatesFor($user = null)
+    {
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
     }
 }

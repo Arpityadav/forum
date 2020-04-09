@@ -8,6 +8,14 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <a href="{{ $thread->path() }}">
+                                @auth()
+                                    @if  ($thread->hasUpdatesFor(auth()->user()) )
+                                        <strong>{{ $thread->title }}</strong>
+                                    @else
+                                        {{ $thread->title }}
+                                    @endif
+                                @endauth
+
                                 {{ $thread->title }}
                             </a>
                             <small class="float-right" href="{{ $thread->path() }}">

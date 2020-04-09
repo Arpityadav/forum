@@ -2,6 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\Notifications\ThreadWasUpdated;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Testing\Fakes\NotificationFake;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,15 +45,29 @@ class ThreadTest extends TestCase
     /** @test */
     public function it_can_add_a_reply()
     {
-        $reply = create('App\Reply');
-        $user = create('App\User');
-
         $this->thread->addReply([
             'body' => 'Foo',
             'user_id' => 1
         ]);
 
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    /** @test */
+    public function a_thread_notifies_subscribed_user_that_a_reply_is_added()
+    {
+        Notification::fake();
+        $this->signIn();
+
+        $this->thread->subscribe();
+
+        $this->thread->addReply([
+            'body' => 'Foo',
+            'user_id' => create('App\User')->id
+        ]);
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
+
     }
 
     /** @test */
@@ -92,5 +110,22 @@ class ThreadTest extends TestCase
         $thread->subscribe();
 
         $this->assertTrue($thread->isSubscribedTo);
+    }
+
+    /** @test */
+    public function a_thread_knows_if_the_authenticated_user_has_read_all_replies()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+
+        tap(auth()->user(), function ($user) use ($thread) {
+            $this->assertTrue($thread->hasUpdatesFor($user));
+
+            $user->read($thread);
+
+            $this->assertFalse($thread->hasUpdatesFor($user));
+        });
+
     }
 }
