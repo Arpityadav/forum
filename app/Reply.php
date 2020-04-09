@@ -16,7 +16,7 @@ class Reply extends Model
 
     protected $appends = ['favoritesCount', 'isFavorited'];
 
-    protected $touches = ['updated_at'];
+    protected $touches = ['thread'];
 
     protected static function boot()
     {
