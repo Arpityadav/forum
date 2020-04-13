@@ -41,13 +41,15 @@
             addReply() {
                 axios.post(location.pathname + '/replies', { body: this.body })
                 .then (response => {
-
                     this.body = '';
 
                     flash('Your reply has been left.');
 
                     this.$emit('created', response.data);
-                });
+                })
+                .catch(error => {
+                    flash(error.response.data, 'danger');
+                })
             }
         }
     }
