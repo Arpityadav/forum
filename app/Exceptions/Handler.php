@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -42,10 +43,20 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ValidationException) {
+            if ($request->wantsJson()) {
+                return response('Sorry validation failed.', 422);
+            }
+        }
+
+        if ($exception instanceof ThrottleException) {
+            return response('You are posting too frequently. Please wait for a while.', 429);
+        }
+
         return parent::render($request, $exception);
     }
 }

@@ -104,7 +104,6 @@ class ParticipateInForumTest extends TestCase
     public function reply_that_contain_spam_words_are_not_created()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         $thread = create('App\Thread');
 
@@ -112,7 +111,7 @@ class ParticipateInForumTest extends TestCase
             'body' => 'Yahoo Customer Support'
         ]);
 
-        $this->post($thread->path() .'/replies', $reply->toArray())
+        $this->postJson($thread->path() .'/replies', $reply->toArray())
             ->assertStatus(422);
     }
 

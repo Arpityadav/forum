@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostPolicy;
 use App\Reply;
 use App\Thread;
 use App\Rules\SpamFree;
@@ -19,24 +20,12 @@ class RepliesController extends Controller
         return $thread->replies()->paginate(10);
     }
 
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, CreatePostPolicy $form)
     {
-        if (Gate::denies('create', new Reply)) {
-            return response('You are replying very frequently. Please reply after some time.', 429);
-        }
-
-        try {
-           $this->validate(request(), ['body' => ['required', new SpamFree]]);
-
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ]);
-
-            return $reply->load('owner');
-        } catch (\Exception $e) {
-            return response('Reply could not be saved at this moment.', 422);
-        }
+        return $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ])->load('owner');
     }
 
     public function destroy(Reply $reply)
@@ -47,7 +36,6 @@ class RepliesController extends Controller
         if(request()->wantsJSON()){
             return response(['status' => 'Reply deleted.']);
         }
-
 
         return back();
     }
