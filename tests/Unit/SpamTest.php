@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Inspections\Spam;
 use Tests\TestCase;
+use App\Inspections\Spam;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class SpamTest extends TestCase
@@ -29,4 +29,5 @@ class SpamTest extends TestCase
         $this->expectException(\Exception::class);
         $spam->detect('aaaaa');
     }
+
 }

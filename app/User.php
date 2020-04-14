@@ -43,6 +43,11 @@ class User extends Authenticatable
         return $this->hasMany(Activity::class);
     }
 
+    public function lastReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
+    }
+
     public function visitedThreadCacheKey($thread)
     {
         return sprintf('users.%s.visits.%s', $this, $thread->id);

@@ -26,8 +26,9 @@ class ParticipateInForumTest extends TestCase
         $reply = make('App\Reply', ['body' => null]);
         $thread = create('App\Thread');
 
-        $this->post($thread->path() .'/replies', $reply->toArray())
-            ->assertSessionHasErrors('body');
+        $this->post($thread->path() .'/replies', $reply->toArray());
+
+        $this->assertDatabaseMissing('replies', $reply->toArray());
     }
 
     /** @test */
@@ -110,8 +111,25 @@ class ParticipateInForumTest extends TestCase
         $reply = make('App\Reply', [
             'body' => 'Yahoo Customer Support'
         ]);
-        $this->expectException(\Exception::class);
-        $this->post($thread->path() .'/replies', $reply->toArray());
 
+        $this->post($thread->path() .'/replies', $reply->toArray())
+            ->assertStatus(422);
+    }
+
+    /** @test */
+    public function users_can_only_leave_one_reply_in_a_minute()
+    {
+        $this->signIn();
+       $thread = create('App\Thread');
+
+        $reply = make('App\Reply', [
+            'body' => 'A normal reply',
+        ]);
+
+        $this->post($thread->path() .'/replies', $reply->toArray())
+            ->assertStatus(201);
+
+        $this->post($thread->path() .'/replies', $reply->toArray())
+            ->assertStatus(429);
     }
 }
