@@ -10,10 +10,12 @@
 
         <div class="card-body">
             <div v-if="editing">
-                <textarea class="form-control" v-model="body"></textarea>
+                <form @submit="update">
+                    <textarea class="form-control" v-model="body" required></textarea>
 
-                <button class="btn btn-primary btn-sm" @click="update">Update</button>
-                <button class="btn btn-link btn-sm" @click="editing = false">Cancel</button>
+                    <button class="btn btn-primary btn-sm">Update</button>
+                    <button class="btn btn-link btn-sm" type="button" @click="editing = false">Cancel</button>
+                </form>
             </div>
             <div v-else v-text="body"></div>
         </div>

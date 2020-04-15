@@ -28,6 +28,17 @@ class ReplyTest extends TestCase
         $reply->created_at = Carbon::now()->subMonth();
 
         $this->assertFalse($reply->wasJustPublished());
+    }
 
+    /** @test */
+    public function it_knows_its_mentioned_users()
+    {
+        $this->signIn();
+
+        $reply = make('App\Reply', [
+            'body' => '@JohnDoe and @JaneDoe'
+        ]);
+
+        $this->assertEquals(['JohnDoe', 'JaneDoe'], $reply->mentionedUsers());
     }
 }

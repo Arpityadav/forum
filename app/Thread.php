@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Activity;
+use App\Events\ThreadReceivedNewReply;
 use App\Filters\ThreadFilters;
 use App\Notifications\ThreadWasUpdated;
 use Carbon\Carbon;
@@ -71,19 +72,22 @@ class Thread extends Model
     {
         return $this->hasMany(Reply::class);
     }
+
     /**
      * Add a reply to the thread.
      *
      * @param $reply
+     * @return Model
      */
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
 
-        $this->notifySubscriber($reply);
+        event(new ThreadReceivedNewReply($reply));
 
         return $reply;
     }
+
     /**
      * Apply all relevant thread filters.
      *
@@ -118,15 +122,6 @@ class Thread extends Model
         return $this->subscriptions()->where('user_id', auth()->id() )->exists();
     }
 
-    /**
-     * @param $reply
-     */
-    protected function notifySubscriber($reply): void
-    {
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->id)
-            ->each->notify($reply);
-    }
 
     public function hasUpdatesFor($user = null)
     {
