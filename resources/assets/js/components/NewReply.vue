@@ -4,6 +4,7 @@
             <div class="form-group">
                 <textarea
                     name="body"
+                    id="body"
                     class="form-control"
                     rows="5"
                     placeholder="Have something to say?"
@@ -23,8 +24,9 @@
 </template>
 
 <script>
-    export default {
+    import Tribute from "tributejs";
 
+    export default {
         data() {
             return {
                 body: '',
@@ -35,6 +37,27 @@
             signedIn() {
                 return window.App.signedIn;
             }
+        },
+
+        mounted() {
+            let tribute = new Tribute({
+                // column to search against in the object (accepts function or string)
+                lookup: 'value',
+
+                // column that contains the content to insert by default
+                fillAttr: 'value',
+
+                values: function(query, cb) {
+                    axios.get('/api/users', {params: {name: query}} )
+                        .then(function(response){
+                            console.log(response);
+                            cb(response.data);
+                        });
+                },
+
+        });
+
+        tribute.attach(document.querySelectorAll("#body"));
         },
 
         methods: {
@@ -50,7 +73,7 @@
                 .catch(error => {
                     flash(error.response.data, 'danger');
                 })
-            }
+            },
         }
     }
 </script>

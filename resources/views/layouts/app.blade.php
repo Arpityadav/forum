@@ -28,6 +28,7 @@
         [v-cloak] {display: none;}
     </style>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/vendor/tribute.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">

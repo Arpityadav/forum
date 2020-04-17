@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.12.1",
-        "moment": "^2.24.0"
+        "moment": "^2.24.0",
+        "tributejs": "^5.1.3"
     }
 }
