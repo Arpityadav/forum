@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Reply;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -35,7 +36,7 @@ class ReplyTest extends TestCase
     {
         $this->signIn();
 
-        $reply = make('App\Reply', [
+        $reply = new Reply([
             'body' => '@JohnDoe and @JaneDoe'
         ]);
 
@@ -45,7 +46,7 @@ class ReplyTest extends TestCase
     /** @test */
     public function it_wraps_a_mentioned_username_in_a_anchor_tag()
     {
-        $reply = make('App\Reply', [
+        $reply = new Reply([
             'body' => 'Hey @JohnDoe.'
         ]);
 

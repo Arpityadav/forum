@@ -18,4 +18,15 @@ class UserTest extends TestCase
 
         $this->assertEquals($reply->id, $user->lastReply->id);
     }
+
+    /** @test */
+    public function it_can_determine_the_avatar_path()
+    {
+        $user = create('App\User');
+
+        $this->assertEquals(asset('avatars/default.png'), $user->avatar_path);
+
+        $user->avatar_path = 'avatars/me.jpg';
+        $this->assertEquals(asset('avatars/me.jpg'), $user->avatar_path);
+    }
 }

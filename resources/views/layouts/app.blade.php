@@ -28,6 +28,8 @@
 
     <style>
         [v-cloak] {display: none;}
+
+        .level { display: flex; align-items: center; }
     </style>
     @yield('head')
 

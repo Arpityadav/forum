@@ -13,6 +13,8 @@
                 <div class="card">
 
                     <div class="card-header">
+                        <img src="{{ $thread->creator->avatar_path }}" alt="{{ $thread->creator->name }}" width="40" height="40" class="rounded-circle mr-2">
+
                         <a href="/profiles/{{ $thread->creator->name }}">
                             {{ $thread->creator->name }}
                         </a> posted : {{ $thread->title }}
