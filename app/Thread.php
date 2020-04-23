@@ -9,11 +9,13 @@ use App\Notifications\ThreadWasUpdated;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Redis;
 use function foo\func;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity, RecordsVisit;
+
     /**
      * Don't auto-apply mass assignment protection.
      *
@@ -129,4 +131,5 @@ class Thread extends Model
 
         return $this->updated_at > cache($key);
     }
+
 }
