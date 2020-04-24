@@ -6,7 +6,8 @@ Route::get('/', function () {
 
 Route::post('/threads', 'ThreadsController@store');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('threads', 'ThreadsController@index');

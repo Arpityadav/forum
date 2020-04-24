@@ -12,7 +12,7 @@
 
 <script>
     import Reply from './Reply.vue';
-    import NewReply from '../components/NewReply.vue';
+    import NewReply from './NewReply.vue';
     import collection from '../mixins/Collection';
 
 
