@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,33 +27,48 @@ class CreateThreadsTest extends TestCase
     /** @test */
     public function a_thread_has_a_title()
     {
-        $this->publishThread(['title' => null])
+        $user = factory('App\User')->create(['email_verified_at' => true ]);
+
+        $this->publishThread(['title' => null], $user)
             ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function a_thread_has_a_body()
     {
-        $this->publishThread(['body' => null])
+        $user = factory('App\User')->create(['email_verified_at' => true ]);
+
+        $this->publishThread(['body' => null], $user)
             ->assertSessionHasErrors('body');
     }
 
     /** @test */
     public function a_thread_has_a_valid_channel_id()
     {
+        $user = factory('App\User')->create(['email_verified_at' => true ]);
+
         factory('App\Channel', 2)->create();
 
-        $this->publishThread(['channel_id' => null])
+        $this->publishThread(['channel_id' => null], $user)
                 ->assertSessionHasErrors('channel_id');
 
-        $this->publishThread(['channel_id' => 999])
+        $this->publishThread(['channel_id' => 999], $user)
                 ->assertSessionHasErrors('channel_id');
+    }
+
+    /** @test */
+    public function new_users_must_first_confirm_their_email_address_before_creating_threads()
+    {
+        $this->publishThread([], create('App\User', ['email_verified_at' => null]))
+            ->assertRedirect('email/verify');
     }
 
     /** @test */
     public function an_authenticated_user_can_create_a_thread()
     {
-        $this->signIn();
+        $user = factory('App\User')->create(['email_verified_at' => true ]);
+
+        $this->signIn($user);
 
         $thread = make('App\Thread');
 
@@ -76,7 +92,7 @@ class CreateThreadsTest extends TestCase
         $this->delete($thread->path())
             ->assertStatus(403);
     }
-    
+
     /** @test */
     public function authorized_users_can_delete_threads()
     {
@@ -100,15 +116,11 @@ class CreateThreadsTest extends TestCase
             'subject_type' => get_class($reply)
         ]);
 
-//        $this->assertDatabaseMissing('activities', [
-//            'subjecid' => $reply->id,
-//            'type' => get_class($reply)
-//        ]);
     }
 
-    public function publishThread($overrides = [])
+    public function publishThread($overrides = [], $user = null)
     {
-        $this->withExceptionHandling()->signIn();
+        $this->signIn($user);
         $thread = make('App\Thread', $overrides);
 
         return $this->post('/threads', $thread->toArray());
