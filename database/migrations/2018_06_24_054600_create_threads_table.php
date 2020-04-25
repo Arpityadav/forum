@@ -19,7 +19,7 @@ class CreateThreadsTable extends Migration
             $table->integer('channel_id')->unsigned();
             $table->integer('replies_count')->default(0)->unsigned();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->nullable();
             $table->text('body');
             $table->timestamps();
         });

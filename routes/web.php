@@ -4,7 +4,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/threads', 'ThreadsController@store')->middleware('verified');
+Route::post('/threads', 'ThreadsController@store')->middleware('verified')->name('threads');
 
 Auth::routes(['verify' => true]);
 

@@ -22,6 +22,7 @@ class Thread extends Model
      * @var array
      */
     protected $guarded = [];
+
     protected $with = ['creator', 'channel'];
 
     protected $appends = ['isSubscribedTo'];
@@ -33,8 +34,12 @@ class Thread extends Model
     {
         parent::boot();
 
-        static::deleting(function ($thread){
+        static::deleting(function ($thread) {
             $thread->replies->each->delete();
+        });
+
+        static::created(function ($thread) {
+            $thread->update(['slug' => $thread->title]);
         });
     }
 
@@ -136,4 +141,14 @@ class Thread extends Model
     {
         return 'slug';
     }
+
+    public function setSlugAttribute($value)
+    {
+        if (static::whereSlug($slug = str_slug($value))->exists()) {
+            $slug = "{$slug}-{$this->id}";
+        }
+
+        $this->attributes['slug'] = $slug;
+    }
+
 }

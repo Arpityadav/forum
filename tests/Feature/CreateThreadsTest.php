@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Thread;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,32 +28,57 @@ class CreateThreadsTest extends TestCase
     /** @test */
     public function a_thread_has_a_title()
     {
-        $user = factory('App\User')->create(['email_verified_at' => true ]);
-
-        $this->publishThread(['title' => null], $user)
+        $this->publishThread(['title' => null])
             ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function a_thread_has_a_body()
     {
-        $user = factory('App\User')->create(['email_verified_at' => true ]);
-
-        $this->publishThread(['body' => null], $user)
+        $this->publishThread(['body' => null])
             ->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function a_slug_has_a_unique_value()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread', [], 2);
+
+
+        $thread = create('App\Thread', ['title' => 'Foo Title']);
+
+        $this->assertEquals($thread->fresh()->slug, 'foo-title');
+
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
+
+        $this->assertEquals("foo-title-{$thread['id']}", $thread['slug']);
+    }
+
+    /** @test */
+    public function a_title_ending_with_a_number_must_generate_a_proper_slug()
+    {
+
+        $this->signIn();
+
+        $thread = create('App\Thread', ['title' => 'Foo Title 24']);
+
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
+
+        $this->assertEquals("foo-title-24-{$thread['id']}", $thread['slug']);
+
     }
 
     /** @test */
     public function a_thread_has_a_valid_channel_id()
     {
-        $user = factory('App\User')->create(['email_verified_at' => true ]);
-
         factory('App\Channel', 2)->create();
 
-        $this->publishThread(['channel_id' => null], $user)
+        $this->publishThread(['channel_id' => null])
                 ->assertSessionHasErrors('channel_id');
 
-        $this->publishThread(['channel_id' => 999], $user)
+        $this->publishThread(['channel_id' => 999])
                 ->assertSessionHasErrors('channel_id');
     }
 
