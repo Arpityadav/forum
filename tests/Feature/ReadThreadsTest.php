@@ -48,6 +48,7 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_user_can_view_threads_by_particular_user()
     {
+        $this->withoutExceptionHandling();
         $this->signIn(create('App\User', ['name' => 'JohnDoe']));
 
         $threadCreatedByJohnDoe = create('App\Thread', ['user_id' => auth()->id()]);
