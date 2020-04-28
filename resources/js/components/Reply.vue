@@ -1,5 +1,4 @@
 <template>
-
     <div :id="'reply-'+id" class="card my-3">
         <div class="card-header">
             <a :href="'/profiles/+data.owner.name'" class="flex" v-text="data.owner.name">
@@ -20,9 +19,12 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="card-footer" v-if="canUpdate">
-            <button class="btn" @click="editing = true">Edit</button>
-            <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+        <div class="card-footer d-flex justify-content-between">
+            <div v-if="canUpdate">
+                <button class="btn" @click="editing = true">Edit</button>
+                <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+            </div>
+            <button class="btn btn-sm btn-outline-primary ml-auto" @click="markBestReply" v-if="!bestReply">Best Reply?</button>
         </div>
     </div>
 
@@ -44,6 +46,7 @@
                 id: this.data.id,
                 editing: false,
                 body: this.data.body,
+                bestReply: false,
             }
         },
 
@@ -77,6 +80,10 @@
             destroy() {
                 axios.delete('/replies/'+this.data.id);
                      this.$emit('deleted', this.data.id);
+            },
+
+            markBestReply () {
+                this.bestReply = true;
             }
         }
     }
