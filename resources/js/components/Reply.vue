@@ -1,6 +1,6 @@
 <template>
-    <div :id="'reply-'+id" class="card my-3">
-        <div class="card-header">
+    <div :id="'reply-'+id" class="card my-3 ">
+        <div class="card-header" :class="isBest ? 'text-success' : ''">
             <a :href="'/profiles/+data.owner.name'" class="flex" v-text="data.owner.name">
             </a> said <span v-text="ago"></span>
 
@@ -24,7 +24,7 @@
                 <button class="btn" @click="editing = true">Edit</button>
                 <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
             </div>
-            <button class="btn btn-sm btn-outline-primary ml-auto" @click="markBestReply" v-if="!bestReply">Best Reply?</button>
+            <button class="btn btn-sm btn-outline-primary ml-auto" @click="markBestReply" v-if="!isBest">Best Reply?</button>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
                 id: this.data.id,
                 editing: false,
                 body: this.data.body,
-                bestReply: false,
+                isBest: this.data.isBest,
                 reply: this.data
             }
         },
@@ -56,6 +56,12 @@
                 return moment(this.data.created_at).fromNow()+'...';
             },
 
+        },
+
+        created () {
+            window.events.$on('best-reply-selected', id => {
+                this.isBest = (id === this.id);
+            });
         },
 
         methods: {
@@ -77,7 +83,9 @@
             },
 
             markBestReply () {
-                this.bestReply = true;
+                axios.post('/replies/' + this.id + '/best-reply');
+
+                window.events.$emit('best-reply-selected', this.id);
             }
         }
     }

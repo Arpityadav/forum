@@ -2189,7 +2189,7 @@ __webpack_require__.r(__webpack_exports__);
       id: this.data.id,
       editing: false,
       body: this.data.body,
-      bestReply: false,
+      isBest: this.data.isBest,
       reply: this.data
     };
   },
@@ -2197,6 +2197,13 @@ __webpack_require__.r(__webpack_exports__);
     ago: function ago() {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(this.data.created_at).fromNow() + '...';
     }
+  },
+  created: function created() {
+    var _this = this;
+
+    window.events.$on('best-reply-selected', function (id) {
+      _this.isBest = id === _this.id;
+    });
   },
   methods: {
     update: function update() {
@@ -2213,7 +2220,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('deleted', this.data.id);
     },
     markBestReply: function markBestReply() {
-      this.bestReply = true;
+      axios.post('/replies/' + this.id + '/best-reply');
+      window.events.$emit('best-reply-selected', this.id);
     }
   }
 });
@@ -51794,11 +51802,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "card my-3", attrs: { id: "reply-" + _vm.id } },
+    { staticClass: "card my-3 ", attrs: { id: "reply-" + _vm.id } },
     [
       _c(
         "div",
-        { staticClass: "card-header" },
+        { staticClass: "card-header", class: _vm.isBest ? "text-success" : "" },
         [
           _c("a", {
             staticClass: "flex",
@@ -51890,7 +51898,7 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        !_vm.bestReply
+        !_vm.isBest
           ? _c(
               "button",
               {

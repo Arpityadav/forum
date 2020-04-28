@@ -20,9 +20,11 @@ class CreateThreadsTable extends Migration
             $table->integer('replies_count')->default(0)->unsigned();
             $table->string('title');
             $table->string('slug')->unique()->nullable();
-            $table->integer('best_reply_id')->nullable();
+            $table->unsignedInteger('best_reply_id')->nullable();
             $table->text('body');
             $table->timestamps();
+
+            $table->foreign('best_reply_id')->references('id')->on('replies')->onDelete('set null');
         });
     }
 
