@@ -20,7 +20,7 @@
         </div>
 
         <div class="card-footer d-flex justify-content-between">
-            <div v-if="canUpdate">
+            <div v-if="authorize('updateReply', reply)">
                 <button class="btn" @click="editing = true">Edit</button>
                 <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
             </div>
@@ -47,6 +47,7 @@
                 editing: false,
                 body: this.data.body,
                 bestReply: false,
+                reply: this.data
             }
         },
 
@@ -55,13 +56,6 @@
                 return moment(this.data.created_at).fromNow()+'...';
             },
 
-            signedIn() {
-                return window.App.signedIn;
-            },
-
-            canUpdate() {
-                return this.authorize(user => user.id == this.data.user_id);
-            }
         },
 
         methods: {
