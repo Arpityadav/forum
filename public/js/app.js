@@ -2091,6 +2091,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2332,7 +2333,8 @@ __webpack_require__.r(__webpack_exports__);
   props: ['initialRepliesCount'],
   data: function data() {
     return {
-      repliesCount: this.initialRepliesCount
+      repliesCount: this.initialRepliesCount,
+      locked: false
     };
   }
 });
@@ -51772,7 +51774,13 @@ var render = function() {
         on: { changed: _vm.fetch }
       }),
       _vm._v(" "),
-      _c("new-reply", { on: { created: _vm.add } })
+      _vm.$parent.locked
+        ? _c("p", [
+            _vm._v(
+              "This thread has been locked. You cannot leave a reply at the moment."
+            )
+          ])
+        : _c("new-reply", { on: { created: _vm.add } })
     ],
     2
   )
@@ -64223,6 +64231,9 @@ module.exports = {
   owns: function owns(model) {
     var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'user_id';
     return model[prop] === user.id;
+  },
+  admin: function admin() {
+    return ['JohnDoe', 'Arpit'].includes(user.name);
   }
 };
 
