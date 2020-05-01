@@ -22,3 +22,9 @@ $factory->define(App\User::class, function (Faker $faker) {
         'email_verified_at' => \Carbon\Carbon::now(),
     ];
 });
+
+$factory->state(App\User::class, 'administrator', function () {
+    return [
+        'name' => 'JohnDoe'
+    ];
+});
