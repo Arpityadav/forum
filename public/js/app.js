@@ -2330,12 +2330,18 @@ __webpack_require__.r(__webpack_exports__);
     Replies: _components_Replies_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     SubscriptionButton: _components_SubscriptionButton_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  props: ['initialRepliesCount'],
+  props: ['thread'],
   data: function data() {
     return {
-      repliesCount: this.initialRepliesCount,
-      locked: false
+      repliesCount: this.thread.replies_count,
+      locked: this.thread.locked
     };
+  },
+  methods: {
+    lock: function lock() {
+      axios[this.locked ? 'delete' : 'post']('/lock-thread/' + this.thread.slug);
+      this.locked = !this.locked;
+    }
   }
 });
 

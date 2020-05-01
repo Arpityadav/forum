@@ -5,12 +5,20 @@
     export default {
         components: { Replies, SubscriptionButton },
 
-        props: ['initialRepliesCount'],
+        props: ['thread'],
 
-        data() {
+        data () {
             return {
-                repliesCount: this.initialRepliesCount,
-                locked: false,
+                repliesCount: this.thread.replies_count,
+                locked: this.thread.locked,
+            }
+        },
+
+        methods: {
+            lock () {
+                axios[this.locked ? 'delete' : 'post']('/lock-thread/' + this.thread.slug);
+
+                this.locked = ! this.locked;
             }
         }
     }

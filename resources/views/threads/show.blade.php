@@ -6,7 +6,7 @@
 
 @section('content')
 
-<thread-view :initial-replies-count="{{ $thread->replies_count }}" inline-template>
+<thread-view :thread="{{ $thread }}" inline-template>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -41,7 +41,12 @@
 
                     <p>
                         <subscription-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscription-button>
-                        <button class="btn btn-default" @click="locked = true" v-if="authorize('admin')">Lock</button>
+
+                        <button class="btn btn-default"
+                                @click="lock"
+                                v-if="authorize('admin')"
+                                v-text="locked ? 'Unlock' : 'Lock'"></button>
+
                     </p>
                 </div>
             </div>
