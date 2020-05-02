@@ -12,7 +12,6 @@ use App\Trending;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
-use Zttp\Zttp;
 
 class ThreadsController extends Controller
 {
@@ -62,9 +61,9 @@ class ThreadsController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Spam $spam, Recaptcha $recaptcha)
+    public function store(Spam $spam, Recaptcha $recaptcha)
     {
-        $this->validate($request, [
+        request()->validate([
             'title' => ['required', new SpamFree],
             'body' => ['required', new SpamFree],
             'channel_id' => 'required|exists:channels,id',
@@ -80,7 +79,7 @@ class ThreadsController extends Controller
             'body' => request('body')
         ]);
 
-        if ($request->wantsJson()) {
+        if (request()->wantsJson()) {
             return response($thread, 201);
         }
 
@@ -106,6 +105,18 @@ class ThreadsController extends Controller
         $thread->recordVisit();
 
         return view('threads.show', compact('thread'));
+    }
+
+    public function update($channel, Thread $thread)
+    {
+        $this->authorize('update', $thread);
+
+        request()->validate([
+            'title' => ['required', new SpamFree],
+            'body' => ['required', new SpamFree],
+        ]);
+
+        $thread->update(request(['title', 'body']));
     }
 
     /**

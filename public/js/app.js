@@ -2334,7 +2334,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       repliesCount: this.thread.replies_count,
-      locked: this.thread.locked
+      locked: this.thread.locked,
+      editing: false
     };
   },
   methods: {
