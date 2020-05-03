@@ -9,9 +9,6 @@ use App\Rules\Recaptcha;
 use App\Rules\SpamFree;
 use App\Thread;
 use App\Trending;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
 class ThreadsController extends Controller
 {
