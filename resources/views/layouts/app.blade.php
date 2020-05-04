@@ -30,6 +30,7 @@
         [v-cloak] {display: none;}
 
         .level { display: flex; align-items: center; }
+    .ais-highlight > em { background-color: yellow; font-style: normal; }
     </style>
     @yield('head')
 

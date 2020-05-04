@@ -2,6 +2,9 @@
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
+
+import InstantSearch from 'vue-instantsearch';
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -37,6 +40,8 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+Vue.use(InstantSearch);
 
 window.events = new Vue();
 
