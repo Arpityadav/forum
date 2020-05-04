@@ -9,6 +9,8 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('threads/search', 'SearchController@show');
+
 Route::get('threads', 'ThreadsController@index');
 Route::get('/threads/create', 'ThreadsController@create');
 Route::post('/threads', 'ThreadsController@store')->middleware('verified')->name('threads');

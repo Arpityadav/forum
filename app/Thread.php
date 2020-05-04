@@ -2,19 +2,15 @@
 
 namespace App;
 
-use App\Activity;
 use App\Events\ThreadReceivedNewReply;
 use App\Filters\ThreadFilters;
-use App\Notifications\ThreadWasUpdated;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Redis;
-use function foo\func;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
-    use RecordActivity, RecordsVisit;
+    use RecordActivity, RecordsVisit, Searchable;
 
     /**
      * Don't auto-apply mass assignment protection.
@@ -116,7 +112,7 @@ class Thread extends Model
 
     public function unsubscribe($userId = null)
     {
-        $this->subscriptions()->where('user_id', $userId ?: auth()->id() )->delete();
+        $this->subscriptions()->where('user_id', $userId ?: auth()->id())->delete();
     }
 
     public function subscriptions()
@@ -126,7 +122,7 @@ class Thread extends Model
 
     public function getIsSubscribedToAttribute()
     {
-        return $this->subscriptions()->where('user_id', auth()->id() )->exists();
+        return $this->subscriptions()->where('user_id', auth()->id())->exists();
     }
 
 
@@ -155,5 +151,4 @@ class Thread extends Model
     {
         $this->update(['best_reply_id' => $reply->id]);
     }
-
 }
