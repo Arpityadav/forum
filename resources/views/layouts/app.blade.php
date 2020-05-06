@@ -30,10 +30,11 @@
         [v-cloak] {display: none;}
 
         .level { display: flex; align-items: center; }
-    .ais-highlight > em { background-color: yellow; font-style: normal; }
+        .ais-highlight > em { background-color: yellow; font-style: normal; }
     </style>
     @yield('head')
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.2.1/trix.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>

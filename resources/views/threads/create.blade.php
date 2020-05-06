@@ -34,10 +34,12 @@
                             <input type="text" class="form-control" name="title" value="{{ old('title') }}" required>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="body">Body</label>
-                            <textarea name="body" class="form-control" rows="6" required>{{ old('body') }}</textarea>
-                        </div>
+                        <wysiwyg name="body"></wysiwyg>
+
+{{--                        <div class="form-group row">--}}
+{{--                            <label for="body">Body</label>--}}
+{{--                            <textarea name="body" class="form-control" rows="6" required>{{ old('body') }}</textarea>--}}
+{{--                        </div>--}}
 
                         <div class="form-group">
                             <div class="g-recaptcha" data-sitekey="6LeJL_EUAAAAALArIOeqakXbAX_Dam0fSb9NmW5N"></div>
