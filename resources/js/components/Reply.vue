@@ -10,7 +10,8 @@
         <div class="card-body">
             <div v-if="editing">
                 <form @submit="update">
-                    <textarea class="form-control" v-model="body" required></textarea>
+                    <wysiwyg v-model="body"></wysiwyg>
+<!--                    <textarea class="form-control" v-model="body" required></textarea>-->
 
                     <button class="btn btn-primary btn-sm">Update</button>
                     <button class="btn btn-link btn-sm" type="button" @click="editing = false">Cancel</button>

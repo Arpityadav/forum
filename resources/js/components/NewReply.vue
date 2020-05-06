@@ -2,13 +2,7 @@
     <div class="col-md-8">
         <div v-if="signedIn">
             <div class="form-group">
-                <textarea
-                    name="body"
-                    id="body"
-                    class="form-control"
-                    rows="5"
-                    placeholder="Have something to say?"
-                    v-model="body"></textarea>
+                <wysiwyg name="body" v-model="body" placeholder="Have something to say?" :shouldClear="completed"></wysiwyg>
             </div>
 
             <div class="form-group">
@@ -30,6 +24,7 @@
         data() {
             return {
                 body: '',
+                completed: false,
             }
         },
 
@@ -59,6 +54,8 @@
                 axios.post(location.pathname + '/replies', { body: this.body })
                 .then (response => {
                     this.body = '';
+
+                    this.completed = true;
 
                     flash('Your reply has been left.');
 
