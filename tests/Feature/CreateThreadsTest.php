@@ -155,7 +155,6 @@ class CreateThreadsTest extends TestCase
             'subject_id' => $reply->id,
             'subject_type' => get_class($reply)
         ]);
-
     }
 
     public function publishThread($overrides = [], $user = null)
